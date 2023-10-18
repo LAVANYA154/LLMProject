@@ -1,0 +1,72 @@
+.container {
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  table, th, td {
+    border: 1px solid #ccc;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  thead {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  input[type="text"], input[type="number"] {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Styling for the Save and Cancel buttons */
+  button[ng-reflect-router-link=""] {
+    background-color: #4caf50;
+  }
+  
+  button[ng-reflect-router-link=""]::after {
+    content: "Save";
+  }
+  
+  button[ng-reflect-router-link="/view"] {
+    background-color: #d9534f;
+  }
+  
+  button[ng-reflect-router-link="/view"]::after {
+    content: "Cancel";
+  }
+  
+  

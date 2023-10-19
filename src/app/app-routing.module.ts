@@ -19,7 +19,7 @@ const routes: Routes = [{ path: 'home', component: HomePageComponent },
  
 },
 { path: 'register', component: RegisterComponent },
-{ path: '', redirectTo: '/home', pathMatch: 'full' },
+{ path: '', redirectTo: '/login', pathMatch: 'full' },
 {
   path: 'licenses',
   component: LicenseComponent,},

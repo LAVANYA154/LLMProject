@@ -2,6 +2,7 @@ import { Component,OnInit } from '@angular/core';
 import { LicenseService } from 'src/app/license.service';
 import { License } from '../license/license.model';
 import { ActivatedRoute } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-viewlicense-user',
@@ -12,6 +13,7 @@ export class ViewlicenseUserComponent implements OnInit{
   
   licenses: License[] = []; // Array to store all licenses
   username :string='';
+  filterCategory: string = 'All'; // Default filter
   constructor(private licenseService: LicenseService, private route:ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -28,36 +30,47 @@ export class ViewlicenseUserComponent implements OnInit{
   }
   clickedLicenses: { [licenseId: number]: boolean } = {};
   // Function to handle purchasing software
-purchaseSoftware(licenses:License,username:any): void {
-  // Show a confirmation dialog to confirm the purchase
-  console.log("hii")
+
+purchaseSoftware(licenses: License, username: any): void {
   this.route.paramMap.subscribe(params => {
-   username = params.get('uname');
-  console.log('Username:', username);
-  console.log(licenses,username);
-  this.clickedLicenses[licenses.id] = true;
+    username = params.get('uname');
+    this.clickedLicenses[licenses.id] = true;
 
-  const confirmPurchase = confirm(`Purchase ${licenses.id}? for ${username} `);
-  if (confirmPurchase) {
-    // Send licenses and username to the server
-    console.log(username);
-    this.licenseService.getPurchaseDetails(licenses,username).subscribe(
-      (response) => {
-        // Handle the response from the server if needed
-        
-        console.log('Purchase response:', response);
-
-        // TODO: Implement the actual purchase logic here, such as sending a request to a payment gateway,
-        // updating user licenses, and handling the response
-      },
-      (error) => {
-        alert('Error purchasing software');
-        console.error('Error purchasing software:', error);
+    Swal.fire({
+      title: 'Confirm Purchase',
+      text: `Purchase ${licenses.id} for ${username}?`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // User clicked 'Yes,' proceed with the purchase logic
+        this.licenseService.getPurchaseDetails(licenses, username).subscribe(
+          (response) => {
+            console.log('Request response:', response);
+            // Handle success response
+          },
+          (error) => {
+            if (error.status === 409) {
+              // License already requested
+              Swal.fire('License Requested', 'You have already requested this license', 'info');
+            } else {
+              // Handle other errors
+              Swal.fire('Error', 'An error occurred while purchasing software', 'error');
+            }
+          }
+        );
       }
-    );
+    });
+  });
+}
+filterLicensesByCategory(): License[] {
+  if (this.filterCategory === 'All') {
+    return this.licenses;
+  } else {
+    return this.licenses.filter((license) => license.category === this.filterCategory);
   }
-});
-
 }
 
 }

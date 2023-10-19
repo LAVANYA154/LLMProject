@@ -1,0 +1,106 @@
+/* Add this CSS to your component's stylesheet */
+
+.container {
+  margin-top: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+
+thead {
+  background-color: #007bff;
+  color: white;
+}
+
+th {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-right: 5px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Style the "Request License" button */
+button.btn-primary {
+  background-color: #007bff;
+}
+
+button.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Style the table headers */
+th {
+  background-color: #171818;
+  color: white;
+}
+
+/* Style the table rows */
+tr {
+  border-bottom: 1px solid #ccc;
+}
+
+/* Center-align text in the action column */
+td:last-child {
+  text-align: center;
+}
+
+/* Add some spacing around the buttons */
+button + button {
+  margin-left: 10px;
+}
+
+/* Style for "No licenses found" message */
+.ng-template p {
+  font-size: 18px;
+  color: #888;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.text-center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: left;
+  height: fit-content; /* Adjust this as needed for your layout */
+}

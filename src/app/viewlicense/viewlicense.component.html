@@ -1,8 +1,12 @@
+<app-license></app-license>
 <div class="container mt-4">
   <h2>List of Licenses</h2>
   
   <!-- Filter by Category Dropdown -->
-
+  <div class="filter-item">
+    <label for="searchQuery">Search:</label>
+    <input type="text" [(ngModel)]="searchQuery" (keyup)="filterLicenses()"  placeholder="Search by Asset Name" />
+  </div>
   <div class="form-group">
     <label for="category">Filter by Category:</label>
     <!-- <fa-icon [icon]="faFilter"></fa-icon> -->
@@ -49,12 +53,21 @@
         </td>
         <td>{{ license.category }}</td>
         <td>
-          <button (click)="editLicense(license)" *ngIf="!license.editing">Edit</button>
-          <button (click)="saveLicense(license)" *ngIf="license.editing">Save</button>
-          <button (click)="cancelEdit(license)" *ngIf="license.editing">Cancel</button>
-          <button (click)="deleteLicense(license.id)">Delete</button>
-        </td>
-      </tr>
+          <div class="button-group">
+            <button class="fa" (click)="editLicense(license)" *ngIf="!license.editing"> 
+              <fa-icon [icon]="faEdit"></fa-icon>
+            </button>
+            <button class="fas" (click)="deleteLicense(license.id)">
+              <fa-icon [icon]="faTrash"></fa-icon>
+            </button>
+          </div>
+          
+          <button class="fa" (click)="saveLicense(license)" *ngIf="license.editing">
+            <fa-icon [icon]="faSave"></fa-icon></button>
+          <button class="fa" (click)="cancelEdit(license)" *ngIf="license.editing">   
+            <fa-icon [icon]="faTimes"></fa-icon>
+          </button>
+                       </tr>
     </tbody>
   </table>
 </div>

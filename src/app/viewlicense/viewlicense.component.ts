@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LicenseService } from 'src/app/license.service';
 import { License } from '../license/license.model';
+import { faEdit, faSave, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons'; // Import Font Awesome icons
 
 @Component({
   selector: 'app-view-license',
@@ -8,8 +9,14 @@ import { License } from '../license/license.model';
   styleUrls: ['./viewlicense.component.css']
 })
 export class ViewlicenseComponent implements OnInit {
+  faEdit = faEdit;
+  faSave = faSave;
+  faTimes = faTimes;
+  faTrash = faTrash;
   licenses: License[] = [];
   filterCategory: string = 'All'; // Default filter
+  searchQuery:string='';
+  searchlist:License[]=[]
   // searchTerm: string = '';
 
   constructor(private licenseService: LicenseService) {}
@@ -20,6 +27,7 @@ export class ViewlicenseComponent implements OnInit {
 
   retrieveLicenses(): void {
     this.licenseService.getAllLicenses().subscribe((data) => {
+      this.searchlist = data
       this.licenses = data.map((license: License) => ({
         ...license,
         editing: false
@@ -30,21 +38,23 @@ export class ViewlicenseComponent implements OnInit {
         license.editedValidity = license.validity;
         license.editedVendorName = license.vendorName;
       });
-      // this.filterLicenses();
+      this.filterLicenses();
     });
   }
 
-  // filterLicenses(): void {
-  //   this.licenses = this.licenses.filter((license) => {
-  //     const categoryMatches = this.filterCategory === 'All' || license.category === this.filterCategory;
-  //     const searchTermMatches = license.name.toLowerCase().includes(this.searchTerm.toLowerCase());
-  //     return categoryMatches && searchTermMatches;
-  //   });
-  // }
+  filterLicenses(): void {
+    this.licenses = this.searchlist.filter((license) => {
+      const categoryMatches = this.filterCategory === 'All' || license.category === this.filterCategory;
+      const searchTermMatches = license.name.toLowerCase().startsWith(this.searchQuery.toLowerCase());
+      console.log(searchTermMatches);
+      return categoryMatches && searchTermMatches;
+      
+    });
+  }
 
-  // onSearch(): void {
-  //   this.filterLicenses();
-  // }
+  onSearch(): void {
+    this.filterLicenses();
+  }
 
   editLicense(license: License): void {
     license.editing = true;

@@ -18,7 +18,9 @@ import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { RenewalComponent } from './renewal/renewal.component';
 import { UserpageComponent } from './userpage/userpage.component';// import { SearchComponent } from './license/search/search.component';
 import { NgChartsModule } from 'ng2-charts';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'; // Import the module
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faEdit, faSave, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 
 @NgModule({
@@ -48,4 +50,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'; // Import 
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor() {
+    // Add the icons to the library during initialization
+    library.add(faEdit, faSave, faTimes, faTrash);
+  }
+ }

@@ -10,17 +10,30 @@ import { Chart } from 'chart.js';
 })
 export class HomePageComponent implements OnInit
 {
-  
+	details:any[]=[];
+ 
+    piechartCategory:any
 	chart: any;
+	users:any;
+	notactivated:any;
+    softwareData: any;
+	softwares:any;
+	devices:any;
 
-  softwareData: any;
-
-  constructor(private yourService: LicenseService) { }
+  constructor(private licenseservice: LicenseService){
+	this.licenseservice.getactivatedUserCount().subscribe((response: any)=>
+	this.users=response),
+	this.licenseservice.getUnactivatedUserCount().subscribe((response:any)=>
+	this.notactivated=response),
+	this.licenseservice.getSoftwaresCount().subscribe((response:any)=>
+	this.softwares=response),
+	this.licenseservice.getDevicesCount().subscribe((response:any)=>
+	this.devices=response)	
+  }
 
   ngOnInit() {
 	console.log("bf service")
-    this.yourService.getSoftwareCount().subscribe((data: any) => {
-      // Extract data from your service response
+    this.licenseservice.getSoftwareCount().subscribe((data: any) => {
       const labels = Object.keys(data);
       const values = Object.values(data);
 	  console.log("data"+labels)
@@ -40,8 +53,27 @@ export class HomePageComponent implements OnInit
 
       this.createChart();
     });
-  }
+	// Pie Chart
+    this.licenseservice.getAllLicenses().subscribe((data) => {
+		if (Array.isArray(data)) {
+		  // If data is an array, it's in the expected format
+		  const categories = data.map((license) => license.category);
+		  const typeCounts = this.countTypes(categories);
+		  this.createPieChart(
+			'networkAssetsPieChart',
+			'Network Assets by Type',
+			Object.keys(typeCounts),
+			Object.values(typeCounts)
+		  );
+		} else {
+		  // Handle the case where data is not in the expected format
+		  console.error('Data is not in the expected format:', data);
+		}
+	  });
+	  
 
+  }
+// Line chart
   createChart() {
     this.chart = new Chart('line-chart', {
       type: 'line',
@@ -66,73 +98,56 @@ export class HomePageComponent implements OnInit
         }
       }
     });
+	this.licenseservice.getactiavtedUser().subscribe(
+		(data:any[])=>
+		{
+		  console.log("Hi activated user",data);
+		  this.details=data;
+		  console.log(this.details+"activated user")
+		});
   }
 
-	
-	// chartOptions = {
-	// 	theme: "light2",
-	// 	animationEnabled: true,
-	// 	zoomEnabled: true,
+
+  // Count the occurrences of each asset type
+  countTypes(types: string[]) {
+    const counts: { [key: string]: number } = {};
+    for (const type of types) {
+      counts[type] = counts[type] ? counts[type] + 1 : 1;
+    }
+    return counts;
+  }
+  createPieChart(chartId: string, title: string, labels: string[], data: number[]): void {
+	this.piechartCategory = new Chart(chartId, {
+	  type: 'pie',
+	  data: {
+		labels: labels,
+		datasets: [
+		  {
+			data: data,
+			backgroundColor: [
+			  'rgba(255, 99, 132, 0.6)',
+			  'rgba(54, 162, 235, 0.6)',
+			  'rgba(255, 206, 86, 0.6)',
+			  'rgba(75, 192, 192, 0.6)',
+			  'rgba(153, 102, 255, 0.6)',
+			  'rgba(255, 159, 64, 0.6)',
+			],
+		  },
+		],
+	  },
+	//   options: {
 	// 	title: {
-	// 		text: "Employees nd softwares"
+	// 	  display: true,
+	// 	  text: title,
 	// 	},
-	// 	axisY: {
-	// 		labelFormatter: (e: any) => {
-	// 			var suffixes = ["", "K", "M", "B", "T"];
- 
-	// 			var order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
-	// 			if(order > suffixes.length - 1)
-	// 				order = suffixes.length - 1;
- 
-	// 			var suffix = suffixes[order];
-	// 			return "$" + (e.value / Math.pow(1000, order)) + suffix;
-	// 		}
-	// 	},
-	// 	data: [{
-	// 		type: "line",
-	// 		xValueFormatString: "YYYY",
-	// 		yValueFormatString: "$#,###.##",
-	// 		dataPoints: [
-	// 		  { x: new Date(1980, 0, 1), y: 2500582120 },
-	// 		  { x: new Date(1981, 0, 1), y: 2318922620 },
-	// 		  { x: new Date(1982, 0, 1), y: 2682595570 },
-	// 		  { x: new Date(1983, 0, 1), y: 3319952630 },
-	// 		  { x: new Date(1984, 0, 1), y: 3220180980 },
-	// 		  { x: new Date(1985, 0, 1), y: 4627024630 },
-	// 		  { x: new Date(1986, 0, 1), y: 6317198860 },
-	// 		  { x: new Date(1987, 0, 1), y: 7653429640 },
-	// 		//   { x: new Date(1988, 0, 1), y: 9314027340 },
-	// 		//   { x: new Date(1989, 0, 1), y: 11377814830 },
-	// 		//   { x: new Date(1990, 0, 1), y: 9379751620 },
-	// 		//   { x: new Date(1991, 0, 1), y: 11185055410 },
-	// 		//   { x: new Date(1992, 0, 1), y: 10705343270 },
-	// 		//   { x: new Date(1993, 0, 1), y: 13764161445.9 },
-	// 		//   { x: new Date(1994, 0, 1), y: 14470193647.6 },
-	// 		//   { x: new Date(1995, 0, 1), y: 17087721440.6 },
-	// 		//   { x: new Date(1996, 0, 1), y: 19594314507.7 },
-	// 		//   { x: new Date(1997, 0, 1), y: 21708247148.4 },
-	// 		//   { x: new Date(1998, 0, 1), y: 25445271790 },
-	// 		//   { x: new Date(1999, 0, 1), y: 33492125981.9 },
-	// 		//   { x: new Date(2000, 0, 1), y: 30963463195.2 },
-	// 		//   { x: new Date(2001, 0, 1), y: 26815924144.7 },
-	// 		//   { x: new Date(2002, 0, 1), y: 22770427533.4 },
-	// 		//   { x: new Date(2003, 0, 1), y: 31253989239.5 },
-	// 		//   { x: new Date(2004, 0, 1), y: 36677497452.5 },
-	// 		//   { x: new Date(2005, 0, 1), y: 40439926591.3 },
-	// 		//   { x: new Date(2006, 0, 1), y: 49993998569.1 },
-	// 		//   { x: new Date(2007, 0, 1), y: 60305010382.7 },
-	// 		//   { x: new Date(2008, 0, 1), y: 32271465666.7 },
-	// 		//   { x: new Date(2009, 0, 1), y: 43959427666.5 },
-	// 		//   { x: new Date(2010, 0, 1), y: 50941861580.9 },
-	// 		//   { x: new Date(2011, 0, 1), y: 43956921719.4 },
-	// 		//   { x: new Date(2012, 0, 1), y: 50655765599.9 },
-	// 		//   { x: new Date(2013, 0, 1), y: 59629932862.7 },
-	// 		//   { x: new Date(2014, 0, 1), y: 62837256171.1 },
-	// 		//   { x: new Date(2015, 0, 1), y: 61894377981.9 },
-	// 		//   { x: new Date(2016, 0, 1), y: 64998472607.9 },
-	// 		//   { x: new Date(2017, 0, 1), y: 75233321687.8 },
-	// 		//   { x: new Date(2018, 0, 1), y: 68650476424.8 }
-	// 		]
-	// 	}]
-	// }	
+	//   },
+	});
+  }
+  
+
 }
+
+ 
+
+		
+

@@ -1,5 +1,8 @@
+<app-license></app-license>
+
+
 <div class="container mt-4">
-  <h2>View All Users</h2>
+  <h2>Requested Employee List</h2>
   <div *ngIf="details.length > 0; else noUsers">
     <table class="table table-bordered table-striped">
       <thead class="thead-dark">
@@ -33,6 +36,6 @@
     </table>
   </div>
   <ng-template #noUsers>
-    <p>No users found.</p>
+    <p>No employees found.</p>
   </ng-template>
 </div>

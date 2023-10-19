@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { LicenseService } from '../license.service';
 import { Details } from '../Details';
 import { Router } from '@angular/router';
-
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-activateuser',
   templateUrl: './activateuser.component.html',
@@ -25,24 +25,40 @@ export class ActivateuserComponent {
 
 
   activateUser(detail: Details) {
-    this.licenseService.useractivation(detail).subscribe(
-      (response) => {
-        console.log('User activation', response);
+    // Use SweetAlert to confirm user activation
+    Swal.fire({
+      title: 'Activate User',
+      text: 'Are you sure you want to activate this user?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, activate!',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.licenseService.useractivation(detail).subscribe(
+          (response) => {
+            console.log('User activation', response);
   
-        // Toggle the showActivated flag to reload the data
-        this.showActivated = !this.showActivated;
-        this.refreshData();
-        this.router.navigate(['/activateduser'])
-      },
-      (error) => {
-        alert('Error user activation');
-        console.error('Error user activation:', error);
+            // Show success message with SweetAlert
+            Swal.fire('Success', 'User activated successfully!', 'success');
+  
+            // Toggle the showActivated flag to reload the data
+            this.showActivated = !this.showActivated;
+            this.refreshData();
+            this.router.navigate(['/activateduser']);
+          },
+          (error) => {
+            // Show error message with SweetAlert
+            Swal.fire('Error', 'Failed to activate user', 'error');
+            console.error('Error user activation:', error);
+          }
+        );
+        // Generate OTP
+        this.licenseService.generateOtp(detail.username).subscribe();
       }
-    );
-    // console.log("sdfghj"+detail.username);
-    this.licenseService.generateOtp(detail.username).subscribe();
-    //
+    });
   }
+  
 
   refreshData() {
     this.licenseService.getAllrequestSoftware().subscribe((data: Details[]) => {

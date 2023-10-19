@@ -1,4 +1,4 @@
-
+<app-license></app-license>
 <div class="container center">
   <h2>Add New License</h2>
   <form [formGroup]="licenseForm" (ngSubmit)="saveLicense()" >
@@ -26,14 +26,14 @@
 
     <!-- License Cost -->
     <div class="form-group">
-      <label for="cost">License Cost:</label>
+      <label for="cost">License Cost: (in USD)</label>
       <input type="number" class="form-control" id="cost" formControlName="cost" required>
       <p *ngIf="licenseForm.get('cost')?.errors?.['required'] && licenseForm.get('cost')?.['touched']">License Cost is required</p>
     </div>
 
     <!-- License Validity -->
     <div class="form-group">
-      <label for="validity">License Validity:</label>
+      <label for="validity">License Validity: (in days)</label>
       <input type="number" class="form-control" id="validity" formControlName="validity" required>
       <p *ngIf="licenseForm.get('validity')?.errors?.['required'] && licenseForm.get('validity')?.['touched']">License Validity is required</p>
     </div>

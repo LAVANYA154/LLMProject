@@ -11,15 +11,9 @@ import { Details } from './Details';
   providedIn: 'root'
 })
 export class LicenseService {
-  
-  
-  getLicensesForUser(username: string) {
-    throw new Error('Method not implemented.');
-  }
-  // searchLicensesBySoftwareName(searchTerm: string) {
-  //   throw new Error('Method not implemented.');
-  // }
-  private apiUrl = 'http://localhost:3434/api/licenses';
+
+  // GetLicenses
+	private apiUrl = 'http://localhost:3434/api/licenses';
 
   constructor(private http: HttpClient) { }
 
@@ -45,12 +39,25 @@ export class LicenseService {
   getLicenseById(licenseId: number): Observable<License> {
     return this.http.get<License>(`${this.apiUrl}/getlicense/${licenseId}`);
   }
+  
+  getSoftwaresCount() {
+    return this.http.get(this.apiUrl+'/getSoftwaresCount')
+	   }
+    
+     getDevicesCount() {
+    return this.http.get(this.apiUrl+'/getDevicesCount')
+  }
+
+  getAllCategory() {
+    return this.http.get(this.apiUrl+'/getPieChartData')
+  	}
+  
 
   
 
 
 
-  //requestlicense
+  //RequestLicense
   baseurl: string = 'http://localhost:3434/api/request';
   user:any;
   
@@ -101,6 +108,15 @@ export class LicenseService {
     }
     return this.http.post('http://localhost:3434/api/request/sendEmail',body);
   }
-
+  //activated usercount
+  getactivatedUserCount () {
+    return this.http.get(this.baseurl+'/getActivatedUserCount');
+  }
+  // unactivated user count
+  getUnactivatedUserCount() {
+	  return this.http.get(this.baseurl+'/getUnactivatedUserCount');
+  }
+  
+  
 
 }

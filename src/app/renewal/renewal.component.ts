@@ -29,8 +29,17 @@ export class RenewalComponent implements OnInit{
       // Call the user service to handle the renewal
       this.licenseservice.renewUserLicense(id, username).subscribe((response) => {
         // Handle the response as needed
+        alert('License has been updated')
         console.log('Renewal submitted with data:', response);
-      });
+      },
+      (error)=>{
+        alert('You already requested the license');
+        console.error('Error:', error);
+
+
+      }
+      );
+
     }
   }
 
@@ -44,7 +53,7 @@ export class RenewalComponent implements OnInit{
     const username = this.renewalForm.get('username')?.value;
 
       this.licenseservice.declineLicense(id, username).subscribe((response) => {
-       console.log('Renewal submitted with data:', response);
+       console.log('Deleted successfully',response);
       // Remove the license from the list after successful deletion
       // const index = this.licenses.findIndex(license => license.id === id);
       // if (index !== -1) {
@@ -58,22 +67,3 @@ export class RenewalComponent implements OnInit{
 }
 }
 }
-// deleteLicense(id: number): void {
-//   const confirmDelete = confirm('Are you sure you want to delete this license?');
-
-//   if (confirmDelete) {
-//     this.licenseService.deleteLicense(id).subscribe(
-//       response => {
-//         console.log('License deleted successfully:', response);
-//         // Remove the license from the list after successful deletion
-//         const index = this.licenses.findIndex(license => license.id === id);
-//         if (index !== -1) {
-//           this.licenses.splice(index, 1);
-//         }
-//       },
-//       error => {
-//         console.error('Error deleting license:', error);
-//       }
-//     );
-//   }
-// }
